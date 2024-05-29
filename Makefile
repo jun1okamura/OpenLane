@@ -35,6 +35,11 @@ DOCKER_OPTIONS += -e DISPLAY=$(DISPLAY) -v /tmp/.X11-unix:/tmp/.X11-unix -v $(HO
   ifneq ("$(wildcard $(HOME)/.openroad)","")
     DOCKER_OPTIONS += -v $(HOME)/.openroad:/.openroad
   endif
+else ifeq ($(UNAME_S),Darwin)  # means MAC with XQuartz
+DOCKER_OPTIONS += -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix -v $(HOME)/.Xauthority:/.Xauthority --network host --security-opt seccomp=unconfined        
+  ifneq ("$(wildcard $(HOME)/.openroad)","")    
+    DOCKER_OPTIONS += -v $(HOME)/.openroad:/.openroad          
+  endif                         
 endif
 
 THREADS ?= 1
